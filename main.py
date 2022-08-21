@@ -211,6 +211,8 @@ class Zlapp(Fudan):
         }
 
         print("\n\n◉◉提交中")
+
+        time.sleep(random.randint(0,10*60))
         
         province = self.last_info["province"]
         city = self.last_info["city"]
@@ -315,7 +317,8 @@ if __name__ == '__main__':
         daily_fudan.check()
     
     save_info = daily_fudan.save_info
+    save_str = json.dumps(save_info, indent=2).decode("unicode-escape")
     email = Email()
-    email.sendemail(daily_fudan.is_submit,json.dumps(save_info, indent=2))
+    email.sendemail(daily_fudan.is_submit,)
 
     daily_fudan.close()
