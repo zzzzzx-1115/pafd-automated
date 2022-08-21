@@ -313,8 +313,6 @@ if __name__ == '__main__':
         daily_fudan.check()
     
     last_info = daily_fudan.last_info
-
-    position = json_loads(last_info["d"]["info"]['geo_api_info'])
     
     email = Email()
     email.sendemail(daily_fudan.is_submit,last_info)
