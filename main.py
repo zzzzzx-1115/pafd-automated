@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import time
 import os
@@ -136,7 +137,9 @@ class Fudan:
 class Zlapp(Fudan):
     last_info = ''
     save_info = ''
+    submit_time = None
     is_submit = False
+
     def check(self):
         """
         检查
@@ -213,6 +216,9 @@ class Zlapp(Fudan):
         print("\n\n◉◉提交中")
 
         time.sleep(random.randint(0,10*60))
+        # 随机等待 0-10 分钟
+
+        self.submit_time = datetime.now().strftime('%Y.%m.%d-%H:%M:%S')
         
         province = self.last_info["province"]
         city = self.last_info["city"]
@@ -316,9 +322,23 @@ if __name__ == '__main__':
         # 再检查一遍
         daily_fudan.check()
     
-    save_info = daily_fudan.save_info
-    save_str = json.dumps(save_info, indent=2).decode("unicode-escape")
+
+    try:
+        save_info = daily_fudan.save_info
+        submit_time = daily_fudan.submit_time
+
+        position = save_info["d"]["info"]['geo_api_info']
+        position = json_loads(position)
+
+        addr = position['formattedAddress']
+        gps = position["position"]
+    except:
+        submit_time = None
+        addr = None
+        gps = None
+
+    content = 'submit time : {}\naddress : {}\ngps : {}'.format(submit_time,addr,gps)
     email = Email()
-    email.sendemail(daily_fudan.is_submit,)
+    email.sendemail(daily_fudan.is_submit,content)
 
     daily_fudan.close()
