@@ -8,7 +8,6 @@ from getpass import getpass
 import random
 import re
 import base64
-from turtle import position
 import easyocr
 import io
 import numpy
