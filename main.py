@@ -5,14 +5,17 @@ from json import loads as json_loads
 from os import path as os_path, getenv
 from sys import exit as sys_exit
 from getpass import getpass
+import random
 import re
 import base64
+from turtle import position
 import easyocr
 import io
 import numpy
 from PIL import Image
 from PIL import ImageEnhance
 
+from sendemail import Email
 from requests import session, post, adapters
 adapters.DEFAULT_RETRIES = 5
 
@@ -128,12 +131,12 @@ class Fudan:
         self.session.close()
         print("◉关闭会话")
         print("************************")
-        sys_exit(exit_code)
+        # sys_exit(exit_code)
 
 
 class Zlapp(Fudan):
     last_info = ''
-
+    is_submit = False
     def check(self):
         """
         检查
@@ -164,7 +167,8 @@ class Zlapp(Fudan):
         print("◉今日日期为:", today)
         if last_info["d"]["info"]["date"] == today:
             print("\n*******今日已提交*******")
-            self.close()
+            self.is_submit = True
+            # self.close()
         else:
             print("\n\n*******未提交*******")
             self.last_info = last_info["d"]["oldInfo"]
@@ -257,6 +261,7 @@ class Zlapp(Fudan):
             time.sleep(0.1)
             if(json_loads(save.text)["e"] != 1):
                 break
+        self.is_submit = True
 
 def get_account():
     """
@@ -302,7 +307,17 @@ if __name__ == '__main__':
     daily_fudan.login()
 
     daily_fudan.check()
-    daily_fudan.checkin()
-    # 再检查一遍
-    daily_fudan.check()
-    daily_fudan.close(1)
+
+    if not daily_fudan.is_submit :
+        daily_fudan.checkin()
+        # 再检查一遍
+        daily_fudan.check()
+    
+    last_info = daily_fudan.last_info
+
+    position = json_loads(last_info["d"]["info"]['geo_api_info'])
+    
+    email = Email()
+    email.sendemail(daily_fudan.is_submit,last_info)
+
+    daily_fudan.close()
