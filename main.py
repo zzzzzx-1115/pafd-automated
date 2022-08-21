@@ -135,6 +135,7 @@ class Fudan:
 
 class Zlapp(Fudan):
     last_info = ''
+    save_info = ''
     is_submit = False
     def check(self):
         """
@@ -166,6 +167,7 @@ class Zlapp(Fudan):
         print("◉今日日期为:", today)
         if last_info["d"]["info"]["date"] == today:
             print("\n*******今日已提交*******")
+            self.save_info = last_info
             self.is_submit = True
             # self.close()
         else:
@@ -312,9 +314,8 @@ if __name__ == '__main__':
         # 再检查一遍
         daily_fudan.check()
     
-    last_info = daily_fudan.last_info
-    
+    save_info = daily_fudan.save_info
     email = Email()
-    email.sendemail(daily_fudan.is_submit,last_info)
+    email.sendemail(daily_fudan.is_submit,json.dumps(save_info, indent=2))
 
     daily_fudan.close()
