@@ -337,8 +337,8 @@ if __name__ == '__main__':
         addr = None
         gps = None
 
-    content = 'submit time : {}\naddress : {}\ngps : {}'.format(submit_time,addr,gps)
-    email = Email()
-    email.sendemail(daily_fudan.is_submit,content)
+    # content = 'submit time : {}\naddress : {}\ngps : {}'.format(submit_time,addr,gps)
+    # email = Email()
+    # email.sendemail(daily_fudan.is_submit,content)
 
     daily_fudan.close()
