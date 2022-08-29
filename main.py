@@ -215,7 +215,7 @@ class Zlapp(Fudan):
 
         print("\n\n◉◉提交中")
 
-        time.sleep(random.randint(0,10*60))
+        #time.sleep(random.randint(0,10*60))
         # 随机等待 0-10 分钟
 
         self.submit_time = datetime.now().strftime('%Y.%m.%d-%H:%M:%S')
@@ -280,6 +280,8 @@ def get_account():
     psw = getenv("PASSWORD")
     if uid != None and psw != None:
         print("从环境变量中获取了用户名和密码！")
+        print(uid)
+        print(psw)
         return uid, psw
     print("\n\n请仔细阅读以下日志！！\n请仔细阅读以下日志！！！！\n请仔细阅读以下日志！！！！！！\n\n")
     if os_path.exists("account.txt"):
